@@ -1,0 +1,77 @@
+<nz-page-header nzTitle="Pacientes" nzSubtitle="Registro de pacientes">
+  <nz-page-header-extra>
+    <button nz-button nzType="primary" (click)="nuevo()">
+      <nz-icon nzType="plus" /> Nuevo paciente
+    </button>
+  </nz-page-header-extra>
+</nz-page-header>
+
+<div class="toolbar">
+  <nz-input-wrapper class="toolbar-search">
+    <nz-icon nzInputPrefix nzType="search" />
+    <input
+      nz-input
+      placeholder="Buscar por nombre, documento o ciudad"
+      [value]="busqueda()"
+      (input)="busqueda.set($any($event.target).value)"
+    />
+  </nz-input-wrapper>
+  <button nz-button (click)="store.cargar()" [nzLoading]="store.cargando()">
+    <nz-icon nzType="reload" /> Actualizar
+  </button>
+</div>
+
+@if (store.error(); as error) {
+  <nz-alert nzType="error" nzShowIcon [nzMessage]="error" class="form-alert" />
+}
+
+<nz-table
+  #tabla
+  [nzData]="filtrados()"
+  [nzLoading]="store.cargando()"
+  [nzPageSize]="10"
+  nzSize="middle"
+  [nzScroll]="{ x: '800px' }"
+>
+  <thead>
+    <tr>
+      <th>Apellidos</th>
+      <th>Nombres</th>
+      <th>Documento</th>
+      <th>Dirección</th>
+      <th>Barrio</th>
+      <th>Ciudad</th>
+      <th nzRight nzWidth="150px">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (p of tabla.data; track p.id) {
+      <tr>
+        <td>{{ p.apellidos }}</td>
+        <td>{{ p.nombres }}</td>
+        <td>{{ p.numeroDocumento }}</td>
+        <td>{{ p.direccion }}</td>
+        <td>{{ p.barrio }}</td>
+        <td>{{ p.ciudad }}</td>
+        <td nzRight>
+          <a [routerLink]="[p.id]" nz-tooltip nzTooltipTitle="Ver ficha">
+            <nz-icon nzType="eye" />
+          </a>
+          <nz-divider nzType="vertical" />
+          <a (click)="editar(p)" nz-tooltip nzTooltipTitle="Editar"><nz-icon nzType="edit" /></a>
+          <nz-divider nzType="vertical" />
+          <a
+            class="danger"
+            nz-popconfirm
+            nzPopconfirmTitle="¿Eliminar este paciente?"
+            nzOkText="Eliminar"
+            nzOkDanger
+            (nzOnConfirm)="eliminar(p)"
+          >
+            <nz-icon nzType="delete" />
+          </a>
+        </td>
+      </tr>
+    }
+  </tbody>
+</nz-table>

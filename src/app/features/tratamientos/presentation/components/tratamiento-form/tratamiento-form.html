@@ -1,0 +1,113 @@
+<app-error-tip #errores />
+
+<form nz-form nzLayout="vertical" [formGroup]="form" (ngSubmit)="guardar()">
+  @if (envio.error(); as error) {
+    <nz-alert nzType="error" nzShowIcon [nzMessage]="error" class="form-alert" />
+  }
+
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="pacienteId">Paciente</nz-form-label>
+    <nz-form-control [nzErrorTip]="errores.plantilla()">
+      <nz-select
+        nzId="pacienteId"
+        formControlName="pacienteId"
+        nzShowSearch
+        nzPlaceHolder="Seleccione un paciente"
+        nzNotFoundContent="Sin coincidencias"
+        [nzLoading]="pacientes.cargando()"
+      >
+        @for (p of pacientes.pacientes(); track p.id) {
+          <nz-option [nzValue]="p.id" [nzLabel]="nombreCompleto(p) + ' — ' + p.numeroDocumento" />
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="procedimientoId">Procedimiento</nz-form-label>
+    <nz-form-control [nzErrorTip]="errores.plantilla()">
+      <nz-select
+        nzId="procedimientoId"
+        formControlName="procedimientoId"
+        nzShowSearch
+        nzPlaceHolder="Seleccione un procedimiento"
+        nzNotFoundContent="Sin coincidencias"
+        [nzLoading]="procedimientos.cargando()"
+      >
+        @for (p of procedimientos.elementos(); track p.id) {
+          <nz-option [nzValue]="p.id" [nzLabel]="p.descripcion" />
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="materiaId">Materia</nz-form-label>
+    <nz-form-control [nzErrorTip]="errores.plantilla()">
+      <nz-select
+        nzId="materiaId"
+        formControlName="materiaId"
+        nzShowSearch
+        nzPlaceHolder="Seleccione una materia"
+        nzNotFoundContent="Sin coincidencias"
+        [nzLoading]="materias.cargando()"
+      >
+        @for (m of materias.elementos(); track m.id) {
+          <nz-option [nzValue]="m.id" [nzLabel]="m.descripcion" />
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <div nz-row [nzGutter]="16">
+    <nz-form-item nz-col [nzXs]="24" [nzSm]="12">
+      <nz-form-label nzRequired nzFor="fechaInicio">Fecha de inicio</nz-form-label>
+      <nz-form-control [nzErrorTip]="errores.plantilla()">
+        <nz-date-picker
+          nzId="fechaInicio"
+          formControlName="fechaInicio"
+          nzFormat="dd/MM/yyyy"
+          class="full-width"
+        />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-col [nzXs]="24" [nzSm]="12">
+      <nz-form-label nzFor="fechaFin">Fecha de finalización</nz-form-label>
+      <nz-form-control nzExtra="Vacío: el tratamiento está en curso">
+        <nz-date-picker
+          nzId="fechaFin"
+          formControlName="fechaFin"
+          nzFormat="dd/MM/yyyy"
+          nzPlaceHolder="En curso"
+          [nzDisabledDate]="antesDelInicio"
+          class="full-width"
+        />
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  @if (form.hasError('fechas')) {
+    <nz-alert
+      nzType="warning"
+      nzShowIcon
+      nzMessage="La fecha de finalización no puede ser anterior a la de inicio"
+      class="form-alert"
+    />
+  }
+
+  <button type="submit" hidden></button>
+</form>
+
+<div *nzModalFooter>
+  <button nz-button type="button" (click)="envio.cancelar()">Cancelar</button>
+  <button
+    nz-button
+    nzType="primary"
+    type="button"
+    [nzLoading]="envio.guardando()"
+    (click)="guardar()"
+  >
+    Guardar
+  </button>
+</div>

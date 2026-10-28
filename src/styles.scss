@@ -1,0 +1,28 @@
+/* Estilos globales */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.toolbar-search {
+  flex: 1 1 280px;
+  max-width: 420px;
+}
+
+.form-alert {
+  margin-bottom: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.section {
+  margin-top: 24px;
+}
+
+a.danger {
+  color: #ff4d4f;
+}

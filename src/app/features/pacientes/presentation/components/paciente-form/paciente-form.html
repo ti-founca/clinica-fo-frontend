@@ -1,0 +1,69 @@
+<app-error-tip #errores />
+
+<form nz-form nzLayout="vertical" [formGroup]="form" (ngSubmit)="guardar()">
+  @if (envio.error(); as error) {
+    <nz-alert nzType="error" nzShowIcon [nzMessage]="error" class="form-alert" />
+  }
+
+  <div nz-row [nzGutter]="16">
+    <nz-form-item nz-col [nzXs]="24" [nzSm]="12">
+      <nz-form-label nzRequired nzFor="nombres">Nombres</nz-form-label>
+      <nz-form-control [nzErrorTip]="errores.plantilla()">
+        <input nz-input id="nombres" formControlName="nombres" maxlength="100" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-col [nzXs]="24" [nzSm]="12">
+      <nz-form-label nzRequired nzFor="apellidos">Apellidos</nz-form-label>
+      <nz-form-control [nzErrorTip]="errores.plantilla()">
+        <input nz-input id="apellidos" formControlName="apellidos" maxlength="100" />
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="numeroDocumento">Número de documento</nz-form-label>
+    <nz-form-control [nzErrorTip]="errores.plantilla()">
+      <input nz-input id="numeroDocumento" formControlName="numeroDocumento" maxlength="20" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label nzRequired nzFor="direccion">Dirección</nz-form-label>
+    <nz-form-control [nzErrorTip]="errores.plantilla()">
+      <input nz-input id="direccion" formControlName="direccion" maxlength="200" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <div nz-row [nzGutter]="16">
+    <nz-form-item nz-col [nzXs]="24" [nzSm]="12">
+      <nz-form-label nzRequired nzFor="barrio">Barrio</nz-form-label>
+      <nz-form-control [nzErrorTip]="errores.plantilla()">
+        <input nz-input id="barrio" formControlName="barrio" maxlength="100" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-col [nzXs]="24" [nzSm]="12">
+      <nz-form-label nzRequired nzFor="ciudad">Ciudad</nz-form-label>
+      <nz-form-control [nzErrorTip]="errores.plantilla()">
+        <input nz-input id="ciudad" formControlName="ciudad" maxlength="100" />
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <!-- Permite enviar con Enter -->
+  <button type="submit" hidden></button>
+</form>
+
+<div *nzModalFooter>
+  <button nz-button type="button" (click)="envio.cancelar()">Cancelar</button>
+  <button
+    nz-button
+    nzType="primary"
+    type="button"
+    [nzLoading]="envio.guardando()"
+    (click)="guardar()"
+  >
+    Guardar
+  </button>
+</div>

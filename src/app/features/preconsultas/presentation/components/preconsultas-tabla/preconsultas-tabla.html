@@ -1,0 +1,56 @@
+<nz-table
+  #tabla
+  [nzData]="preconsultas()"
+  [nzLoading]="cargando()"
+  [nzPageSize]="10"
+  nzSize="middle"
+  [nzScroll]="{ x: '760px' }"
+>
+  <thead>
+    <tr>
+      <th>Fecha y hora</th>
+      @if (mostrarPaciente()) {
+        <th>Paciente</th>
+      }
+      <th>Presión arterial</th>
+      <th>Frec. cardíaca</th>
+      <th>Temperatura</th>
+      <th nzRight nzWidth="110px">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (p of tabla.data; track p.id) {
+      <tr>
+        <td>{{ p.fechaHora | date: 'dd/MM/yyyy HH:mm' }}</td>
+        @if (mostrarPaciente()) {
+          <td>
+            @if (pacientes.porId().get(p.pacienteId); as paciente) {
+              <a [routerLink]="['/pacientes', p.pacienteId]">{{ nombreCompleto(paciente) }}</a>
+            } @else {
+              <a [routerLink]="['/pacientes', p.pacienteId]">Paciente #{{ p.pacienteId }}</a>
+            }
+          </td>
+        }
+        <td>{{ p.presionSistolica }}/{{ p.presionDiastolica }} mmHg</td>
+        <td>{{ p.frecuenciaCardiaca }} lpm</td>
+        <td>{{ p.temperatura | number: '1.1-1' }} °C</td>
+        <td nzRight>
+          <a (click)="editar.emit(p)" nz-tooltip nzTooltipTitle="Editar"
+            ><nz-icon nzType="edit"
+          /></a>
+          <nz-divider nzType="vertical" />
+          <a
+            class="danger"
+            nz-popconfirm
+            nzPopconfirmTitle="¿Eliminar esta preconsulta?"
+            nzOkText="Eliminar"
+            nzOkDanger
+            (nzOnConfirm)="eliminar.emit(p)"
+          >
+            <nz-icon nzType="delete" />
+          </a>
+        </td>
+      </tr>
+    }
+  </tbody>
+</nz-table>

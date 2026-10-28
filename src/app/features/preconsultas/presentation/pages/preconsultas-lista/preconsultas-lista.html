@@ -1,0 +1,38 @@
+<nz-page-header nzTitle="Preconsultas" nzSubtitle="Signos vitales previos a la consulta">
+  <nz-page-header-extra>
+    <button nz-button nzType="primary" (click)="nueva()">
+      <nz-icon nzType="plus" /> Nueva preconsulta
+    </button>
+  </nz-page-header-extra>
+</nz-page-header>
+
+<div class="toolbar">
+  <nz-select
+    class="toolbar-search"
+    nzShowSearch
+    nzAllowClear
+    nzPlaceHolder="Filtrar por paciente"
+    nzNotFoundContent="Sin coincidencias"
+    [nzLoading]="pacientes.cargando()"
+    [ngModel]="store.pacienteId()"
+    (ngModelChange)="store.filtrarPorPaciente($event ?? null)"
+  >
+    @for (p of pacientes.pacientes(); track p.id) {
+      <nz-option [nzValue]="p.id" [nzLabel]="nombreCompleto(p) + ' — ' + p.numeroDocumento" />
+    }
+  </nz-select>
+  <button nz-button (click)="store.cargar()" [nzLoading]="store.cargando()">
+    <nz-icon nzType="reload" /> Actualizar
+  </button>
+</div>
+
+@if (store.error(); as error) {
+  <nz-alert nzType="error" nzShowIcon [nzMessage]="error" class="form-alert" />
+}
+
+<app-preconsultas-tabla
+  [preconsultas]="store.preconsultas()"
+  [cargando]="store.cargando()"
+  (editar)="editar($event)"
+  (eliminar)="eliminar($event)"
+/>

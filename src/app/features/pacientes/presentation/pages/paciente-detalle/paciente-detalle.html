@@ -1,0 +1,64 @@
+<nz-page-header nzBackIcon (nzBack)="volver()" [nzTitle]="titulo()" nzSubtitle="Ficha del paciente">
+  @if (paciente(); as p) {
+    <nz-page-header-extra>
+      <button nz-button (click)="editarPaciente(p)"><nz-icon nzType="edit" /> Editar</button>
+    </nz-page-header-extra>
+  }
+</nz-page-header>
+
+@if (cargando() && !paciente()) {
+  <nz-skeleton [nzActive]="true" />
+} @else if (error() && !paciente()) {
+  <nz-result nzStatus="404" nzTitle="No se pudo cargar el paciente" [nzSubTitle]="error()!">
+    <div nz-result-extra>
+      <a nz-button nzType="primary" routerLink="/pacientes">Volver a pacientes</a>
+    </div>
+  </nz-result>
+} @else if (paciente(); as p) {
+  <nz-descriptions nzBordered [nzColumn]="{ xxl: 3, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }">
+    <nz-descriptions-item nzTitle="Nombres">{{ p.nombres }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Apellidos">{{ p.apellidos }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Documento">{{ p.numeroDocumento }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Dirección">{{ p.direccion }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Barrio">{{ p.barrio }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Ciudad">{{ p.ciudad }}</nz-descriptions-item>
+  </nz-descriptions>
+
+  <nz-card class="section" nzTitle="Preconsultas" [nzExtra]="acciones">
+    @if (preconsultas.error(); as error) {
+      <nz-alert nzType="error" nzShowIcon [nzMessage]="error" class="form-alert" />
+    }
+    <app-preconsultas-tabla
+      [preconsultas]="preconsultas.preconsultas()"
+      [cargando]="preconsultas.cargando()"
+      [mostrarPaciente]="false"
+      (editar)="editarPreconsulta($event)"
+      (eliminar)="eliminarPreconsulta($event)"
+    />
+  </nz-card>
+
+  <nz-card class="section" nzTitle="Tratamientos" [nzExtra]="accionesTratamientos">
+    @if (tratamientos.error(); as error) {
+      <nz-alert nzType="error" nzShowIcon [nzMessage]="error" class="form-alert" />
+    }
+    <app-tratamientos-tabla
+      [tratamientos]="tratamientos.tratamientos()"
+      [cargando]="tratamientos.cargando()"
+      [mostrarPaciente]="false"
+      (editar)="editarTratamiento($event)"
+      (eliminar)="eliminarTratamiento($event)"
+    />
+  </nz-card>
+
+  <ng-template #acciones>
+    <button nz-button nzType="primary" (click)="nuevaPreconsulta(p)">
+      <nz-icon nzType="plus" /> Nueva preconsulta
+    </button>
+  </ng-template>
+
+  <ng-template #accionesTratamientos>
+    <button nz-button nzType="primary" (click)="nuevoTratamiento(p)">
+      <nz-icon nzType="plus" /> Nuevo tratamiento
+    </button>
+  </ng-template>
+}

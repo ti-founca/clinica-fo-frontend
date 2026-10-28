@@ -1,0 +1,68 @@
+<nz-table
+  #tabla
+  [nzData]="tratamientos()"
+  [nzLoading]="cargando()"
+  [nzPageSize]="10"
+  nzSize="middle"
+  [nzScroll]="{ x: '860px' }"
+>
+  <thead>
+    <tr>
+      @if (mostrarPaciente()) {
+        <th>Paciente</th>
+      }
+      <th>Procedimiento</th>
+      <th>Materia</th>
+      <th>Inicio</th>
+      <th>Finalización</th>
+      <th nzRight nzWidth="110px">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (t of tabla.data; track t.id) {
+      <tr>
+        @if (mostrarPaciente()) {
+          <td>
+            @if (pacientes.porId().get(t.pacienteId); as paciente) {
+              <a [routerLink]="['/pacientes', t.pacienteId]">{{ nombreCompleto(paciente) }}</a>
+            } @else {
+              <a [routerLink]="['/pacientes', t.pacienteId]">Paciente #{{ t.pacienteId }}</a>
+            }
+          </td>
+        }
+        <td>
+          {{
+            procedimientos.porId().get(t.procedimientoId)?.descripcion ??
+              'Procedimiento #' + t.procedimientoId
+          }}
+        </td>
+        <td>{{ materias.porId().get(t.materiaId)?.descripcion ?? 'Materia #' + t.materiaId }}</td>
+        <!-- Fechas LocalDate (sin hora): se formatean en UTC para no desplazar el día. -->
+        <td>{{ t.fechaInicio | date: 'dd/MM/yyyy' : 'UTC' }}</td>
+        <td>
+          @if (enCurso(t)) {
+            <nz-tag nzColor="processing">En curso</nz-tag>
+          } @else {
+            {{ t.fechaFin | date: 'dd/MM/yyyy' : 'UTC' }}
+          }
+        </td>
+        <td nzRight>
+          <a (click)="editar.emit(t)" nz-tooltip nzTooltipTitle="Editar"
+            ><nz-icon nzType="edit"
+          /></a>
+          <nz-divider nzType="vertical" />
+          <a
+            class="danger"
+            nz-popconfirm
+            nzPopconfirmTitle="¿Eliminar este tratamiento?"
+            nzOkText="Eliminar"
+            nzOkDanger
+            (nzOnConfirm)="eliminar.emit(t)"
+          >
+            <nz-icon nzType="delete" />
+          </a>
+        </td>
+      </tr>
+    }
+  </tbody>
+</nz-table>

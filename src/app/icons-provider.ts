@@ -1,0 +1,38 @@
+import {
+  AppstoreOutline,
+  ArrowLeftOutline,
+  BookOutline,
+  DeleteOutline,
+  EditOutline,
+  EyeOutline,
+  HeartOutline,
+  MedicineBoxTwoTone,
+  MenuFoldOutline,
+  MenuUnfoldOutline,
+  PlusOutline,
+  ReloadOutline,
+  SearchOutline,
+  SolutionOutline,
+  TeamOutline,
+  ToolOutline,
+} from '@ant-design/icons-angular/icons';
+
+/** Íconos registrados de forma estática (solo se incluyen en el bundle los usados). */
+export const icons = [
+  AppstoreOutline,
+  ArrowLeftOutline,
+  BookOutline,
+  DeleteOutline,
+  EditOutline,
+  EyeOutline,
+  HeartOutline,
+  MedicineBoxTwoTone,
+  MenuFoldOutline,
+  MenuUnfoldOutline,
+  PlusOutline,
+  ReloadOutline,
+  SearchOutline,
+  SolutionOutline,
+  TeamOutline,
+  ToolOutline,
+];

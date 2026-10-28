@@ -1,0 +1,67 @@
+<nz-layout class="app-layout">
+  <nz-sider
+    class="menu-sidebar"
+    nzCollapsible
+    nzWidth="256px"
+    nzBreakpoint="md"
+    [(nzCollapsed)]="colapsado"
+    [nzTrigger]="null"
+  >
+    <div class="sidebar-logo">
+      <a routerLink="/">
+        <nz-icon nzType="medicine-box" nzTheme="twotone" class="logo-icon" />
+        <h1>Clínicas UNCA</h1>
+      </a>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="colapsado()">
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/pacientes">
+          <nz-icon nzType="team" />
+          <span>Pacientes</span>
+        </a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/preconsultas">
+          <nz-icon nzType="heart" />
+          <span>Preconsultas</span>
+        </a>
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <a routerLink="/tratamientos">
+          <nz-icon nzType="solution" />
+          <span>Tratamientos</span>
+        </a>
+      </li>
+      <li nz-submenu nzTitle="Catálogos" nzIcon="appstore" [nzOpen]="true">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/procedimientos">
+              <nz-icon nzType="tool" />
+              <span>Procedimientos</span>
+            </a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/materias">
+              <nz-icon nzType="book" />
+              <span>Materias</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="colapsado.set(!colapsado())">
+          <nz-icon class="trigger" [nzType]="colapsado() ? 'menu-unfold' : 'menu-fold'" />
+        </span>
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet />
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
